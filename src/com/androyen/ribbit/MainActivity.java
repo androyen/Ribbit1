@@ -2,6 +2,8 @@ package com.androyen.ribbit;
 
 import java.util.Locale;
 
+import com.parse.ParseAnalytics;
+
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -40,8 +42,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        //Set up Parse Analytics
+        ParseAnalytics.trackAppOpened(getIntent());
+        
         //Start login activity
         Intent intent = new Intent(this, LoginActivity.class);
+        
+    	//Remove the main Inbox Actvity from navigation back stack
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
         // Set up the action bar.
