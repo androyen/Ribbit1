@@ -53,6 +53,8 @@ public final class R {
         public static final int hello_world=0x7f050004;
         public static final int login_button_label=0x7f050009;
         public static final int password_hint=0x7f050008;
+        public static final int sign_up_error_message=0x7f05000d;
+        public static final int sign_up_error_title=0x7f05000e;
         public static final int sign_up_label=0x7f05000a;
         public static final int title_activity_login=0x7f050006;
         public static final int title_activity_sign_up=0x7f05000b;
