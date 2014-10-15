@@ -1,8 +1,8 @@
 package com.androyen.ribbit;
 
-import java.util.Locale;
 
-import com.parse.ParseAnalytics;
+
+import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -13,11 +13,15 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.parse.ParseAnalytics;
+import com.parse.ParseUser;
 
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
@@ -36,6 +40,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    
+    //TAG constant
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,20 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         
         //Set up Parse Analytics
         ParseAnalytics.trackAppOpened(getIntent());
+        
+        //Check to see if user is already logged in
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        
+        if (currentUser == null) {
+        	//Show the login screen
+        	Intent intent = new Intent(this, LoginActivity.class);
+        	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        	startActivity(intent);
+        }
+        else {
+        	Log.i(TAG, currentUser.getUsername());
+        }
         
         //Start login activity
         Intent intent = new Intent(this, LoginActivity.class);
