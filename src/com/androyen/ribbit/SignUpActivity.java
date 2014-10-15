@@ -2,12 +2,18 @@ package com.androyen.ribbit;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class SignUpActivity extends Activity {
 	
@@ -56,6 +62,44 @@ public class SignUpActivity extends Activity {
 				
 				}
 				else {
+					
+					//Create new user
+					ParseUser newUser = new ParseUser();
+					newUser.setUsername(username);
+					newUser.setPassword(password);
+					newUser.setEmail(email);
+					
+					//Sign up user in background thread
+					newUser.signUpInBackground(new SignUpCallback() {
+						
+						@Override
+						public void done(ParseException e) {
+							//When sign up is done from Parse.com
+							
+							if (e == null) {
+								//Successful sign up
+								
+								//Open the main mailbox activity
+								Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+								
+								//Need to clear the sign up activity out of back stack
+								intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+								intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+								startActivity(intent);
+							}
+							else {
+								//If there are errors signing up
+								AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+								//Get message from this exception
+								builder.setMessage(e.getMessage());
+								builder.setTitle(R.string.sign_up_error_title);
+								builder.setPositiveButton(android.R.string.ok, null);
+								AlertDialog dialog = builder.create();
+								dialog.show();
+							}
+							
+						}
+					});
 					
 				}
 				
