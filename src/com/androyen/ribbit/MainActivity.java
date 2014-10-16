@@ -61,7 +61,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         else {
         	
         	//Not currently logged in
-        	Log.i(TAG, currentUser.getUsername());
         	navigateToLogin();
         	
         }
