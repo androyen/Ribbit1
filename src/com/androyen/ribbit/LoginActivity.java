@@ -1,14 +1,10 @@
 package com.androyen.ribbit;
 
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseUser;
-import com.parse.SignUpCallback;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+
 public class LoginActivity extends Activity {
+	
+	private static final String TAG = LoginActivity.class.getSimpleName();
 	
 	protected TextView mSignUpTextView;
 	
@@ -54,6 +56,8 @@ public class LoginActivity extends Activity {
 				//trim white space on user input
 				username = username.trim();
 				password = password.trim();
+				
+				Log.v(TAG, "Value of " + username + " and password " + password);
 				
 				
 				//Check if username, password, or emails is not empty

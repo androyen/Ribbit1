@@ -55,16 +55,18 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         //Check to see if user is already logged in
         ParseUser currentUser = ParseUser.getCurrentUser();
         
-        if (currentUser == null) {
-        	//Show the login screen
-        	navigateToLogin();
+        if (currentUser != null) {
+        	
         }
         else {
+        	
+        	//Not currently logged in
         	Log.i(TAG, currentUser.getUsername());
+        	navigateToLogin();
         	
         }
         
-        navigateToLogin();
+//        navigateToLogin();
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
