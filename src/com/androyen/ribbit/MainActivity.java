@@ -57,22 +57,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         
         if (currentUser == null) {
         	//Show the login screen
-        	Intent intent = new Intent(this, LoginActivity.class);
-        	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        	startActivity(intent);
+        	navigateToLogin();
         }
         else {
         	Log.i(TAG, currentUser.getUsername());
+        	
         }
         
-        //Start login activity
-        Intent intent = new Intent(this, LoginActivity.class);
-        
-    	//Remove the main Inbox Actvity from navigation back stack
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        navigateToLogin();
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -110,6 +102,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
 
+	private void navigateToLogin() {
+		Intent intent = new Intent(this, LoginActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		startActivity(intent);
+	}
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -122,10 +122,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
+    
+    	//Check which item is selected in Overflow
+    	int itemId = item.getItemId();
+    	
+    	//If Log Out is selected
+    	if (itemId == R.id.action_logout) {
+    		ParseUser.logOut();
+    		navigateToLogin();
+    	}
+    	
         return super.onOptionsItemSelected(item);
     }
 
