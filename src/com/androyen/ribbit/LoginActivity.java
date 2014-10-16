@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,7 +30,12 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//Set up progress indicator. Done BEFORE setContentView. Get window extended features
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		
 		setContentView(R.layout.activity_login);
+	
 		
 		mSignUpTextView = (TextView) findViewById(R.id.signUpText);
 		mSignUpTextView.setOnClickListener(new View.OnClickListener() {
@@ -79,10 +85,16 @@ public class LoginActivity extends Activity {
 				else {
 					
 					//Logging in
+					//Set progress indicator while logging in
+					setProgressBarIndeterminateVisibility(true);
+					
 					ParseUser.logInInBackground(username, password, new LogInCallback() {
 						
 						@Override
 						public void done(ParseUser user, ParseException e) {
+							//Get rid of progress indicator after sign in successful
+							setProgressBarIndeterminateVisibility(false);
+							
 							//IF login is successful, should  be null
 							if (e == null) {
 								//Open the main mailbox activity
