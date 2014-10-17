@@ -2,12 +2,12 @@ package com.androyen.ribbit;
 
 import java.util.Locale;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 
-import com.androyen.ribbit.MainActivity.PlaceholderFragment;
+
 
 
 /**
@@ -28,7 +28,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+    	
+    	//Per tab click, switch to either Friends or Inbox fragment
+    	switch(position) {
+    	
+	    	case 0:
+	    		return new InboxFragment();
+	    	case 1:
+	    		return new FriendsFragment();
+    	}
+    	
+        return null;
     }
 
     @Override
