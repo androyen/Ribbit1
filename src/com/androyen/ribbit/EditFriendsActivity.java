@@ -6,6 +6,9 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
 public class EditFriendsActivity extends Activity {
 
 	@Override
@@ -20,6 +23,20 @@ public class EditFriendsActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
+	//Setting up ParseQuery to retrieve users in onResume
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		
+		//Sort in ascending order of usernames
+		query.orderByAscending(ParseConstants.KEY_USERNAME);
+		
+		//Set limits of users to retrieve and display to 1000
+		query.setLimit(1000);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
