@@ -73,7 +73,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         
-        //Adjusted paramater to pass this context to SectionsPagerAdapter
+        //Adjusted parameter to pass this context to SectionsPagerAdapter
         mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
@@ -132,6 +132,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	if (itemId == R.id.action_logout) {
     		ParseUser.logOut();
     		navigateToLogin();
+    	}
+    	//If Edit Friends is selected in Action Overflow
+    	else if (itemId == R.id.action_edit_friends) {
+    		
+    		//Open the EditFriendsActivity screen
+    		Intent intent = new Intent(this, EditFriendsActivity.class);
+    		startActivity(intent);
     	}
     	
         return super.onOptionsItemSelected(item);
