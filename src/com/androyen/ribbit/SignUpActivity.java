@@ -75,7 +75,7 @@ public class SignUpActivity extends Activity {
 					newUser.setEmail(email);
 					
 					//Set progress bar indicator
-					setProgressBarIndeterminate(true);
+					setProgressBarIndeterminateVisibility(true);
 					
 					//Sign up user in background thread
 					newUser.signUpInBackground(new SignUpCallback() {
@@ -85,7 +85,7 @@ public class SignUpActivity extends Activity {
 							//When sign up is done from Parse.com
 							
 							//Remove progress bar indicator
-							setProgressBarIndeterminate(false);
+							setProgressBarIndeterminateVisibility(false);
 							
 							if (e == null) {
 								//Successful sign up
