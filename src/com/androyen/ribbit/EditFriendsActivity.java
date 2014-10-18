@@ -9,6 +9,7 @@ import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -16,7 +17,9 @@ import android.widget.ListView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class EditFriendsActivity extends ListActivity {
 	
@@ -24,6 +27,11 @@ public class EditFriendsActivity extends ListActivity {
 	
 	//Get list of ParseUsers from query
 	protected List<ParseUser> mUsers;
+	
+	//Relations of the ParseUser to currentUser
+	protected ParseRelation<ParseUser> mFriendsRelation;
+	
+	protected ParseUser mCurrentUser;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,10 @@ public class EditFriendsActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		//Initialize current user and the relation in onResume()
+		mCurrentUser = ParseUser.getCurrentUser();
+		mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
 		
 		//Show progress bar
 		setProgressBarIndeterminateVisibility(true);
@@ -121,5 +133,39 @@ public class EditFriendsActivity extends ListActivity {
 			
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	//When ListView item is clicked
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		
+		//Conditional
+		//See if item friend is checkmarked
+		if (getListView().isItemChecked(position)) {
+			//add friend
+			
+			//Get the user position that was tapped on the list
+			mFriendsRelation.add(mUsers.get(position));
+			
+			//Save the user selected in list to Parse.com backend in background asynchronously
+			mCurrentUser.saveInBackground(new SaveCallback() {
+				
+				@Override
+				public void done(ParseException e) {
+					
+					//If there is an error, log message
+					if (e != null) {
+						Log.e(TAG, e.getMessage());
+					}
+					
+				}
+			});
+		}
+		else {
+			//remove him
+		}
+		
+		
 	}
 }
