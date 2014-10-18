@@ -96,6 +96,8 @@ public class EditFriendsActivity extends ListActivity {
 					//Adapt list of usernames to the ListView screen
 					ArrayAdapter<String> adapter = new ArrayAdapter<String>(EditFriendsActivity.this, android.R.layout.simple_list_item_checked, usernames);
 					setListAdapter(adapter);
+					
+					addFriendCheckmarks();
 				}
 				else {
 					//Errors on querying users
@@ -167,5 +169,36 @@ public class EditFriendsActivity extends ListActivity {
 		}
 		
 		
+	}
+	
+	private void addFriendCheckmarks() {
+		mFriendsRelation.getQuery().findInBackground(new FindCallback<ParseUser>() {
+
+			@Override
+			public void done(List<ParseUser> friends, ParseException e) {
+				
+				if (e == null) {
+					//list returned - look for a match
+					for (int i = 0; i < mUsers.size(); i++) {
+						
+						//Get the user from mUsers list
+						ParseUser user = mUsers.get(i);
+						
+						//another loop to check this query in the done method
+						for (ParseUser friend: friends) {
+							//Compare object ID of each friend. If it is the same
+							if (friend.getObjectId().equals(user.getObjectId())) {
+								//Set the checkmark in the list to the ith position
+								getListView().setItemChecked(i, true);
+							}
+						}
+					}
+				}
+				else {
+					Log.e(TAG, e.getMessage());
+				}
+				
+			}
+		});
 	}
 }
