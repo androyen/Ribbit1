@@ -125,7 +125,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(now);
 				
 				
-				//Get string path of file
+				//Get string path of file for the media type
 				String path = mediaStorageDir.getPath() + File.separator;
 				if (mediaType == MEDIA_TYPE_IMAGE) {
 					mediaFile = new File(path + "IMG_" + timestamp + ".jpg");
