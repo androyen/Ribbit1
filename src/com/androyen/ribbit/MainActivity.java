@@ -105,6 +105,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				//1. Get the external storage directory   Creates subdirectory with app name Ribbit
 				File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), appName);
 				//2. Create our subdirectory
+				
+				//if folder does not exist
 				if (! mediaStorageDir.exists()) {
 				
 					
@@ -141,6 +143,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				
 				//5. Return the files Uri
 				
+				//Return file just created
 				return Uri.fromFile(mediaFile);
 			}
 			else {
@@ -225,6 +228,28 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+    }
+    
+    
+    //Used startActivityForResult.  Overriding onActivityResult to do something with the result
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	super.onActivityResult(requestCode, resultCode, data);
+    	
+    	//Check resultCode when Activity was opened
+    	if (resultCode == RESULT_OK) {
+    		//successful. Add it to Gallery
+    		Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+    		//Send Uri of file to intent
+    		mediaScanIntent.setData(mMediaUri);
+    		//Broadcast the intent
+    		sendBroadcast(mediaScanIntent);
+    	}
+    	
+    	//When user cancel or clicks the back button on the Camera activity
+    	else if (resultCode != RESULT_CANCELED) {
+    		Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
+    	}
     }
 
 
