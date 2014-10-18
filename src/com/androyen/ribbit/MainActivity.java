@@ -8,6 +8,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -44,6 +45,26 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     
     //TAG constant
     private static final String TAG = MainActivity.class.getSimpleName();
+    
+    //Listener for the camera dialog options in ActionBar
+    protected DialogInterface.OnClickListener mDialogListener = new DialogInterface.OnClickListener() {
+		
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			
+			switch (which) {
+				case 0: //Take picture
+					break;
+				case 1: // Take video
+					break;
+				case 2:  //Choose picture
+					break;
+				case 3:  //Choose video
+					break;
+			}
+			
+		}
+	};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +166,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     		startActivity(intent);
     	case R.id.action_camera:
     		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    		builder.setItems(R.array.camera_choices, null);
+    		
+    		//Add dialog listener in parameter
+    		builder.setItems(R.array.camera_choices, mDialogListener);
     		AlertDialog dialog = builder.create();
     		dialog.show();
     	}
