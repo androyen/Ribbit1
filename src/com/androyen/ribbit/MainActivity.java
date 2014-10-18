@@ -7,7 +7,9 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
@@ -46,6 +49,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public static final int PICK_PHOTO_REQUEST = 2;
     public static final int PICK_VIDEO_REQUEST = 3;
     
+    public static final int MEDIA_TYPE_IMAGE = 4;
+    public static final int MEDIA_TYPE_VIDEO = 5;
+    
+    //uniform resource identifier. Path to a specific file in Android File system
+    protected Uri mMediaUri;
+    
     //Listener for the camera dialog options in ActionBar
     protected DialogInterface.OnClickListener mDialogListener = new DialogInterface.OnClickListener() {
 		
@@ -55,7 +64,17 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			switch (which) {
 				case 0: //Take picture
 					Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-					startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+					mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+					
+					//Check to see if it is null
+					if (mMediaUri == null) {
+						//display an error
+						Toast.makeText(MainActivity.this, R.string.error_external_storage, Toast.LENGTH_LONG).show();
+					}
+					else {
+						takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+						startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+					}
 					break;
 				case 1: // Take video
 					break;
@@ -65,6 +84,35 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					break;
 			}
 			
+		}
+
+		private Uri getOutputMediaFileUri(int mediaType) {
+			
+			//To be safe you should check that external storage is mounted using Environment.getExternalStorageState()
+			//before doing this
+			if (isExternalStorageAvailable()) {
+				//get the file URI
+				return null;
+			}
+			else {
+				return null;
+			}
+			
+			
+		}
+		
+		private boolean isExternalStorageAvailable() {
+			//Gets the status of whether external storage is mounted
+			String state = Environment.getExternalStorageState();
+			
+			if (state.equals(Environment.MEDIA_MOUNTED)) {
+				//If it is mounted
+				return true;
+			}
+			else {
+				
+				return false;
+			}
 		}
 	};
 
