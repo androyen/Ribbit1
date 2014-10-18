@@ -56,6 +56,7 @@ public final class R {
         public static final int email_hint=0x7f05000b;
         public static final int empty_friends_label=0x7f050012;
         public static final int empty_inbox_label=0x7f050011;
+        public static final int error_title=0x7f050015;
         public static final int hello_world=0x7f050003;
         public static final int login_button_label=0x7f050008;
         public static final int login_error_message=0x7f05000e;

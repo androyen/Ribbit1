@@ -1,21 +1,40 @@
 package com.androyen.ribbit;
 
-import android.app.Activity;
+import java.util.List;
+
+import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-public class EditFriendsActivity extends Activity {
+public class EditFriendsActivity extends ListActivity {
+	
+	public static final String TAG = EditFriendsActivity.class.getSimpleName();
+	
+	//Get list of ParseUsers from query
+	protected List<ParseUser> mUsers;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_edit_friends);
 		setupActionBar();
+		
+		//In onCreate, set checkmark in list view of Friends
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 	}
 	
 	private void setupActionBar() {
@@ -28,6 +47,9 @@ public class EditFriendsActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		
+		//Show progress bar
+		setProgressBarIndeterminateVisibility(true);
+		
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
 		
 		//Sort in ascending order of usernames
@@ -35,6 +57,47 @@ public class EditFriendsActivity extends Activity {
 		
 		//Set limits of users to retrieve and display to 1000
 		query.setLimit(1000);
+		
+		//Execute query
+		query.findInBackground(new FindCallback<ParseUser>() {
+			
+			@Override
+			public void done(List<ParseUser> users, ParseException e) {
+				//Hide progress bar
+				setProgressBarIndeterminateVisibility(false);
+				
+				//If e is null, there is users
+				if (e == null) {
+					//Get list of ParseUsers from Done method
+					mUsers = users;
+					
+					//What data do we want to display on screen
+					//Display usernames
+					String[] usernames = new String[mUsers.size()];
+					
+					//Loop through list of ParseUsers and extract username
+					int i = 0;
+					for(ParseUser user: mUsers) {
+						usernames[i] = user.getUsername();
+						i++;
+					}
+					//Adapt list of usernames to the ListView screen
+					ArrayAdapter<String> adapter = new ArrayAdapter<String>(EditFriendsActivity.this, android.R.layout.simple_list_item_checked, usernames);
+					setListAdapter(adapter);
+				}
+				else {
+					//Errors on querying users
+					Log.e(TAG, e.getMessage());
+					AlertDialog.Builder builder = new AlertDialog.Builder(EditFriendsActivity.this);
+					//Get message from this exception
+					builder.setMessage(e.getMessage());
+					builder.setTitle(R.string.error_title);
+					builder.setPositiveButton(android.R.string.ok, null);
+					AlertDialog dialog = builder.create();
+					dialog.show();
+				}
+			}
+		});
 	}
 	
 	@Override
