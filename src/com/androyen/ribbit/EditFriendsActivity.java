@@ -114,13 +114,18 @@ public class EditFriendsActivity extends ListActivity {
 		});
 	}
 	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.edit_friends, menu);
-		return true;
-	}
+	
+	//In Edit Friends Activity, remove Settings from Action Overflow
+	
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.edit_friends, menu);
+//		return true;
+//	}
 
+	
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -150,23 +155,26 @@ public class EditFriendsActivity extends ListActivity {
 			//Get the user position that was tapped on the list
 			mFriendsRelation.add(mUsers.get(position));
 			
-			//Save the user selected in list to Parse.com backend in background asynchronously
-			mCurrentUser.saveInBackground(new SaveCallback() {
-				
-				@Override
-				public void done(ParseException e) {
-					
-					//If there is an error, log message
-					if (e != null) {
-						Log.e(TAG, e.getMessage());
-					}
-					
-				}
-			});
+			
 		}
 		else {
-			//remove him
+			//remove friend
+			mFriendsRelation.remove(mUsers.get(position));
 		}
+		
+		//Save the user selected in list to Parse.com backend in background asynchronously
+		mCurrentUser.saveInBackground(new SaveCallback() {
+			
+			@Override
+			public void done(ParseException e) {
+				
+				//If there is an error, log message
+				if (e != null) {
+					Log.e(TAG, e.getMessage());
+				}
+				
+			}
+		});
 		
 		
 	}
