@@ -2,24 +2,18 @@ package com.androyen.ribbit;
 
 
 
-import java.util.Locale;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 
 import com.parse.ParseAnalytics;
@@ -46,6 +40,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     //TAG constant
     private static final String TAG = MainActivity.class.getSimpleName();
     
+    //Dialog interface constants for Camera intent requestCode. Used for startActivityForResult
+    public static final int TAKE_PHOTO_REQUEST = 0;
+    public static final int TAKE_VIDEO_REQUEST = 1;
+    public static final int PICK_PHOTO_REQUEST = 2;
+    public static final int PICK_VIDEO_REQUEST = 3;
+    
     //Listener for the camera dialog options in ActionBar
     protected DialogInterface.OnClickListener mDialogListener = new DialogInterface.OnClickListener() {
 		
@@ -54,6 +54,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			
 			switch (which) {
 				case 0: //Take picture
+					Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
 					break;
 				case 1: // Take video
 					break;
