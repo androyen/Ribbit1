@@ -5,6 +5,7 @@ package com.androyen.ribbit;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -131,18 +132,25 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	//Check which item is selected in Overflow
     	int itemId = item.getItemId();
     	
-    	//If Log Out is selected
-    	if (itemId == R.id.action_logout) {
+    	//Which items in Action Overflow is selected
+    	
+    	switch (itemId) {
+    	
+    	case R.id.action_logout:
     		ParseUser.logOut();
     		navigateToLogin();
-    	}
-    	//If Edit Friends is selected in Action Overflow
-    	else if (itemId == R.id.action_edit_friends) {
     		
-    		//Open the EditFriendsActivity screen
+    	case R.id.action_edit_friends:
     		Intent intent = new Intent(this, EditFriendsActivity.class);
     		startActivity(intent);
+    	case R.id.action_camera:
+    		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    		builder.setItems(R.array.camera_choices, null);
+    		AlertDialog dialog = builder.create();
+    		dialog.show();
     	}
+    		
+    
     	
         return super.onOptionsItemSelected(item);
     }
