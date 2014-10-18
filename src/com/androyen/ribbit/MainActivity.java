@@ -2,6 +2,11 @@ package com.androyen.ribbit;
 
 
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
@@ -14,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -66,7 +72,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 					
-					//Check to see if it is null
+					//Check to see if it is mMediaUri is null
 					if (mMediaUri == null) {
 						//display an error
 						Toast.makeText(MainActivity.this, R.string.error_external_storage, Toast.LENGTH_LONG).show();
@@ -92,7 +98,50 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			//before doing this
 			if (isExternalStorageAvailable()) {
 				//get the file URI
-				return null;
+				
+				//Get the app_name  application name
+				String appName = MainActivity.this.getString(R.string.app_name);
+				
+				//1. Get the external storage directory   Creates subdirectory with app name Ribbit
+				File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), appName);
+				//2. Create our subdirectory
+				if (! mediaStorageDir.exists()) {
+				
+					
+					//Returns a boolean value if folder cannot create
+					if (! mediaStorageDir.mkdirs()) {
+						Log.e(TAG, "Failed to create directory");
+					}
+					
+				}
+				//3. Create the file name
+				//4. Create the file
+				
+				//Append date/time stamp on the file
+				File mediaFile;
+				Date now = new Date(); //Get current date/time
+				
+				//Format the date 
+				String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(now);
+				
+				
+				//Get string path of file
+				String path = mediaStorageDir.getPath() + File.separator;
+				if (mediaType == MEDIA_TYPE_IMAGE) {
+					mediaFile = new File(path + "IMG_" + timestamp + ".jpg");
+				}
+				else if (mediaType == MEDIA_TYPE_VIDEO) {
+					mediaFile = new File(path + "VID_" + timestamp + ".mp4");
+				}
+				else {
+					return null;
+				}
+				
+				Log.d(TAG, "File: " + Uri.fromFile(mediaFile));
+				
+				//5. Return the files Uri
+				
+				return Uri.fromFile(mediaFile);
 			}
 			else {
 				return null;
