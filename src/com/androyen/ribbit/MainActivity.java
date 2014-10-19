@@ -106,6 +106,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					
 					break;
 				case 2:  //Choose picture
+					Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+					
+					//Set filter to only select images and not other files such as songs. Set MIME
+					choosePhotoIntent.setType("image/*");
+					startActivityForResult(choosePhotoIntent, PICK_PHOTO_REQUEST);
 					break;
 				case 3:  //Choose video
 					break;
@@ -261,12 +266,27 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	if (resultCode == RESULT_OK) {
     		//successful. Add it to Gallery
     		
-    		//Notify gallery that photos are available. Sending broadcast
-    		Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-    		//Send Uri of file to intent
-    		mediaScanIntent.setData(mMediaUri);
-    		//Broadcast the intent
-    		sendBroadcast(mediaScanIntent);
+    		//The picked video or photo is stored in the Intent data. Checking request code
+    		if (requestCode == PICK_PHOTO_REQUEST || requestCode == PICK_VIDEO_REQUEST) {
+    			if (data == null) {
+    				Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
+    			}
+    			
+    			else {
+    				//Get the Intent and store the Uri. 
+    				mMediaUri = data.getData();
+    			}
+    		}
+    		
+    		else {
+    			
+	    		//Notify gallery that photos are available. Sending broadcast
+	    		Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+	    		//Send Uri of file to intent
+	    		mediaScanIntent.setData(mMediaUri);
+	    		//Broadcast the intent
+	    		sendBroadcast(mediaScanIntent);
+    		}
     	}
     	
     	//When user cancel or clicks the back button on the Camera activity
