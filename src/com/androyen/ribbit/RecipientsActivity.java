@@ -2,20 +2,22 @@ package com.androyen.ribbit;
 
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
-
-import android.app.AlertDialog;
-import android.app.ListActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 public class RecipientsActivity extends ListActivity {
 	
@@ -28,6 +30,9 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 		protected ParseRelation<ParseUser> mFriendsRelation;
 		
 		protected ParseUser mCurrentUser;
+		
+		//Send menu item
+		protected MenuItem mSendMenuItem;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,10 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.recipients, menu);
+		
+		//Get Send menu item object  Only 1 item in menu bar. Set parameter to 0
+		mSendMenuItem = menu.getItem(0);
+		
 		return true;
 	}
 
@@ -60,10 +69,36 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch (id) {
+		
+			case android.R.id.home:
+				NavUtils.navigateUpFromSameTask(this);
+				return true;
+			case R.id.action_send:
 		}
+			
 		return super.onOptionsItemSelected(item);
+	}
+	
+	//Setting up Send button in Action Bar to display if friends are checkmark
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		
+		super.onListItemClick(l, v, position, id);
+		
+	
+		
+		//When items are deselected, remove the Send action bar icon
+		
+		if (l.getCheckedItemCount() > 0) {
+			
+			//Show Send item
+			mSendMenuItem.setVisible(true);
+		}
+		else {
+			mSendMenuItem.setVisible(false);
+		}
+		
 	}
 	
 	
