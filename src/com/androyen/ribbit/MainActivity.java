@@ -3,6 +3,9 @@ package com.androyen.ribbit;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -57,6 +60,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     
     public static final int MEDIA_TYPE_IMAGE = 4;
     public static final int MEDIA_TYPE_VIDEO = 5;
+    
+    //Need to convert file sizes from bytes to MB
+    public static final int FILE_SIZE_LIMIT = 1024 * 1024 *10; // 10 MB
     
     //uniform resource identifier. Path to a specific file in Android File system
     protected Uri mMediaUri;
@@ -113,6 +119,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					startActivityForResult(choosePhotoIntent, PICK_PHOTO_REQUEST);
 					break;
 				case 3:  //Choose video
+					Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+					chooseVideoIntent.setType("video/*");
+					
+					//Set Toast to alert user to select video file less than 10 MB
+					Toast.makeText(MainActivity.this, R.string.video_file_size_warning, Toast.LENGTH_LONG).show();
+					startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
 					break;
 			}
 			
@@ -275,6 +287,58 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     			else {
     				//Get the Intent and store the Uri. 
     				mMediaUri = data.getData();
+    				
+    				Log.i(TAG, "Media URI: " + mMediaUri);
+    				//Check video file size is over 10 MB. Set limits so user selects less than 10 MB file
+    				if (requestCode == PICK_VIDEO_REQUEST) {
+    					
+    					int filesize = 0;
+    					//make sure the file is less than 10MB
+    					//Pick from Gallery gets Content Uri
+    					
+    					
+    					
+    					//Open Input stream to the file.  Gets the data byte by byte
+    					InputStream inputStream = null;
+						try {
+							inputStream = getContentResolver().openInputStream(mMediaUri);
+							
+							//Gets the number of bytes in the file
+							filesize = inputStream.available();
+						} 
+						catch (FileNotFoundException e) {
+							
+							Toast.makeText(this, R.string.error_opening_file, Toast.LENGTH_LONG).show();
+							
+							//exit
+							return;
+						}
+						catch (IOException e) {
+							Toast.makeText(this, R.string.error_opening_file, Toast.LENGTH_LONG).show();
+							
+							//exit
+							return;
+						}
+						finally {
+							//Must close any streams. Closing inputstream to prevent memory leaks
+							try {
+								inputStream.close();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						
+						//Conditional to check the filesize if it is within 10MB
+						if (filesize >= FILE_SIZE_LIMIT) {
+							Toast.makeText(this, R.string.error_file_size_too_large, Toast.LENGTH_LONG).show();
+							
+							//If error, lets end this method
+							return;
+						}
+    					
+    					
+    				}
     			}
     		}
     		
