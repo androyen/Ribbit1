@@ -351,6 +351,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	    		//Broadcast the intent
 	    		sendBroadcast(mediaScanIntent);
     		}
+    		
+    		//After video/photo has been capture, redirecting to RecipientsActivity to send to Friends
+    		Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
+    		
+    		//Attach photo video to Intent
+    		recipientsIntent.setData(mMediaUri);
+    		startActivity(recipientsIntent);
     	}
     	
     	//When user cancel or clicks the back button on the Camera activity
