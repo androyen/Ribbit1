@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class RecipientsActivity extends ListActivity {
 	
@@ -34,7 +35,17 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recipients);
+		
+		//Show the up button in the Action Bar.
+//		setupActionBar();
+		
+		//In onCreate, set checkmark in list view of Friends. Allow to checkmark multiple items in ListView
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 	}
+	
+//	private void setupActionBar() {
+//		getActionBar().setDisplayHomeAsUpEnabled(true);
+//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
