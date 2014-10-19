@@ -83,6 +83,27 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					}
 					break;
 				case 1: // Take video
+					Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+					mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
+					
+					if (mMediaUri == null) {
+						//display an error
+						Toast.makeText(MainActivity.this, R.string.general_error, Toast.LENGTH_LONG).show();
+					}
+					else {
+						//There is a Uri
+						
+						//Put Uri in the Intent
+						videoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+						
+						//Set video capture limit to 10 seconds. Put this parameter as Intent extra
+						videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+						
+						//Parameter for video quality low, set it as 0
+						videoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+						startActivityForResult(videoIntent, TAKE_VIDEO_REQUEST);
+					}
+					
 					break;
 				case 2:  //Choose picture
 					break;
@@ -239,6 +260,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	//Check resultCode when Activity was opened
     	if (resultCode == RESULT_OK) {
     		//successful. Add it to Gallery
+    		
+    		//Notify gallery that photos are available. Sending broadcast
     		Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
     		//Send Uri of file to intent
     		mediaScanIntent.setData(mMediaUri);
