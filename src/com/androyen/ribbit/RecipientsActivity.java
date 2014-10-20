@@ -1,5 +1,6 @@
 package com.androyen.ribbit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
@@ -75,6 +77,11 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 				NavUtils.navigateUpFromSameTask(this);
 				return true;
 			case R.id.action_send:
+				//Send message to Parse
+				//Create message
+				ParseObject message = createMessage();
+				send(message);
+				
 		}
 			
 		return super.onOptionsItemSelected(item);
@@ -163,5 +170,30 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 		});
 		
 		
+	}
+	
+	//helper methods for sending message
+	protected ParseObject createMessage() {
+		ParseObject message = new ParseObject(ParseConstants.CLASS_MESSAGES);
+		//Add data to messages
+		message.put(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
+		message.put(ParseConstants.KEY_SENDER_NAME, ParseUser.getCurrentUser().getUsername());
+		//Get selected friends
+		message.put(ParseConstants.KEY_RECIPIENT_IDS, getRecipientIds());
+		
+		return message;
+	}
+	
+	protected ArrayList<String> getRecipientIds() {
+		ArrayList<String> recipientIds = new ArrayList<String>();
+		
+		//loop through the list of friends. Add friends that are checked
+		for (int i = 0; i < getListView().getCount(); i++) {
+			if (getListView().isItemChecked(i)) {
+				recipientIds.add(mFriends.get(i).getObjectId());
+			}
+		}
+		
+		return recipientIds;
 	}
 }
