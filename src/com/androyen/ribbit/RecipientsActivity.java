@@ -17,6 +17,7 @@ import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
@@ -198,7 +199,29 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 		//Get Image or Video type and send to Parse
 		message.put(ParseConstants.KEY_FILE_TYPE, mFileType);
 		
-		return message;
+		//Convert Message data to byte[] array
+		byte[] fileBytes = FileHelper.getByteArrayFromFile(this, mMediaUri);
+		
+		//null check for errors
+		if (fileBytes == null) {
+			return null;
+		}
+		else {
+			//Create the Parse File
+			
+			//If it is an Image file
+			if (mFileType.equals(ParseConstants.TYPE_IMAGE)) {
+				//Reduce the file size to a PNG file
+				fileBytes = FileHelper.reduceImageForUpload(fileBytes);
+			}
+			
+			//Set filename from the Uri  Appends either PNG or use the video file extension
+			String filename = FileHelper.getFileName(this, mMediaUri, mFileType);
+			ParseFile file = new ParseFile(filename, fileBytes);
+			message.put(ParseConstants.KEY_FILE, file);
+			return message;
+		}
+		
 	}
 	
 	protected ArrayList<String> getRecipientIds() {
