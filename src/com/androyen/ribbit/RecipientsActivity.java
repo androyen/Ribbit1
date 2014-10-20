@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -35,6 +36,12 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 		
 		//Send menu item
 		protected MenuItem mSendMenuItem;
+		
+		//get path of the file
+		protected Uri mMediaUri;
+		
+		//file type
+		protected String mFileType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +55,19 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 		
 		//In onCreate, set checkmark in list view of Friends. Allow to checkmark multiple items in ListView
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		
+		//Get Uri of file
+		mMediaUri = getIntent().getData();
+		
+		//Get the extra of type of either Image of Video
+		mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
 	}
 	
 //	private void setupActionBar() {
 //		getActionBar().setDisplayHomeAsUpEnabled(true);
 //	}
+	
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -180,6 +195,8 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 		message.put(ParseConstants.KEY_SENDER_NAME, ParseUser.getCurrentUser().getUsername());
 		//Get selected friends
 		message.put(ParseConstants.KEY_RECIPIENT_IDS, getRecipientIds());
+		//Get Image or Video type and send to Parse
+		message.put(ParseConstants.KEY_FILE_TYPE, mFileType);
 		
 		return message;
 	}
