@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.AlertDialog.Builder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -22,6 +24,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class RecipientsActivity extends ListActivity {
 	
@@ -96,7 +99,22 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 				//Send message to Parse
 				//Create message
 				ParseObject message = createMessage();
-				send(message);
+				
+				if (message == null) {
+					//error sending
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setMessage(R.string.error_selecting_file)
+					.setTitle(R.string.error_selecting_file_title)
+					.setPositiveButton(android.R.string.ok, null);
+					AlertDialog dialog = builder.create();
+					dialog.show();
+				}
+				else {
+					
+					send(message);
+					//Once successful close this Activity and go to the Inbox
+					finish();
+				}
 				
 		}
 			
@@ -235,5 +253,33 @@ public static final String TAG = RecipientsActivity.class.getSimpleName();
 		}
 		
 		return recipientIds;
+	}
+	
+	//save messages to Parse.com
+	protected void send(ParseObject message) {
+		message.saveInBackground(new SaveCallback() {
+			
+			@Override
+			public void done(ParseException e) {
+				
+				
+				//If error on save
+				if (e == null) {
+					//Success
+					Toast.makeText(RecipientsActivity.this, R.string.success_message, Toast.LENGTH_LONG).show();
+					
+				}
+				else {
+					//Error
+					AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
+					builder.setMessage(R.string.error_sending_message)
+					.setTitle(R.string.error_selecting_file_title)
+					.setPositiveButton(android.R.string.ok, null);
+					AlertDialog dialog = builder.create();
+					dialog.show();
+				}
+				
+			}
+		});
 	}
 }
