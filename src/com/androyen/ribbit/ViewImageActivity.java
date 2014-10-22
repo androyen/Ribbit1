@@ -1,5 +1,8 @@
 package com.androyen.ribbit;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
@@ -23,6 +26,20 @@ public class ViewImageActivity extends Activity {
 		
 		//Need to load the image direct from remote Parse server. Using a Picasso library to load images from Parse
 		Picasso.with(this).load(imageUri.toString()).into(imageView);
+		
+		//Set up Timer to go back to the Inbox
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				//This run method is called after the 10*1000 seconds complete
+				
+				//End Activity
+				finish();
+				
+			}
+		}, 10*1000);
 	}
 
 	
