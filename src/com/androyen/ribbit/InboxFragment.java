@@ -64,8 +64,17 @@ public class InboxFragment extends ListFragment {
 					}
 					
 					//Get Context
-					MessageAdapter adapter = new MessageAdapter(getListView().getContext(), mMessages);
-					setListAdapter(adapter);
+					
+					//Set up condition. Everytime onResume is called, it creates a new adapter. Need to recycle it to maintain
+					//position
+					if (getListView().getAdapter() == null) {
+						MessageAdapter adapter = new MessageAdapter(getListView().getContext(), mMessages);
+						setListAdapter(adapter);
+					}
+					else {
+						//refill the adapter
+						((MessageAdapter)getListView().getAdapter()).refill(mMessages);
+					}
 					
 					}
 				}

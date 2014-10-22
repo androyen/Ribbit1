@@ -40,6 +40,9 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
 			holder = new ViewHolder();
 			holder.iconImageView = (ImageView) convertView.findViewById(R.id.messageIcon);
 			holder.nameLabel = (TextView) convertView.findViewById(R.id.senderLabel);
+			
+			//Set the tag for the view to scroll
+			convertView.setTag(holder);
 		}
 		else {
 			//view already exist   Gets Tag for the view
@@ -64,6 +67,13 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
 	private static class ViewHolder {
 		ImageView iconImageView;
 		TextView nameLabel;
+	}
+	
+	public void refill(List<ParseObject> messages) {
+		//reset adapter
+		mMessages.clear();
+		mMessages.addAll(messages);
+		notifyDataSetChanged();
 	}
 
 }
