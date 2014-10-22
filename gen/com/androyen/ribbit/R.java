@@ -33,16 +33,18 @@ public final class R {
         public static final int ic_launcher=0x7f020004;
     }
     public static final class id {
-        public static final int action_camera=0x7f09000a;
-        public static final int action_edit_friends=0x7f090009;
-        public static final int action_logout=0x7f09000b;
-        public static final int action_send=0x7f09000c;
+        public static final int action_camera=0x7f09000b;
+        public static final int action_edit_friends=0x7f09000a;
+        public static final int action_logout=0x7f09000c;
+        public static final int action_send=0x7f09000d;
+        public static final int action_settings=0x7f09000e;
         public static final int emailField=0x7f090005;
+        public static final int imageView=0x7f090007;
         public static final int loginButton=0x7f090002;
-        public static final int messageIcon=0x7f090007;
+        public static final int messageIcon=0x7f090008;
         public static final int pager=0x7f090004;
         public static final int passwordField=0x7f090001;
-        public static final int senderLabel=0x7f090008;
+        public static final int senderLabel=0x7f090009;
         public static final int signUpText=0x7f090003;
         public static final int signupButton=0x7f090006;
         public static final int usernameField=0x7f090000;
@@ -53,13 +55,15 @@ public final class R {
         public static final int activity_main=0x7f030002;
         public static final int activity_recipients=0x7f030003;
         public static final int activity_sign_up=0x7f030004;
-        public static final int fragment_friends=0x7f030005;
-        public static final int fragment_inbox=0x7f030006;
-        public static final int messsage_item=0x7f030007;
+        public static final int activity_view_image=0x7f030005;
+        public static final int fragment_friends=0x7f030006;
+        public static final int fragment_inbox=0x7f030007;
+        public static final int messsage_item=0x7f030008;
     }
     public static final class menu {
         public static final int main=0x7f080000;
         public static final int recipients=0x7f080001;
+        public static final int view_image=0x7f080002;
     }
     public static final class string {
         public static final int action_settings=0x7f050004;
@@ -93,6 +97,7 @@ public final class R {
         public static final int title_activity_login=0x7f050005;
         public static final int title_activity_recipients=0x7f050022;
         public static final int title_activity_sign_up=0x7f05000a;
+        public static final int title_activity_view_image=0x7f050023;
         public static final int title_section1=0x7f050001;
         public static final int title_section2=0x7f050002;
         public static final int username_hint=0x7f050006;
