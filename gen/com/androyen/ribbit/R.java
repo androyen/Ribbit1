@@ -37,7 +37,6 @@ public final class R {
         public static final int action_edit_friends=0x7f09000a;
         public static final int action_logout=0x7f09000c;
         public static final int action_send=0x7f09000d;
-        public static final int action_settings=0x7f09000e;
         public static final int emailField=0x7f090005;
         public static final int imageView=0x7f090007;
         public static final int loginButton=0x7f090002;
@@ -63,7 +62,6 @@ public final class R {
     public static final class menu {
         public static final int main=0x7f080000;
         public static final int recipients=0x7f080001;
-        public static final int view_image=0x7f080002;
     }
     public static final class string {
         public static final int action_settings=0x7f050004;

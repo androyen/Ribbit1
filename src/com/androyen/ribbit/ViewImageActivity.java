@@ -1,5 +1,7 @@
 package com.androyen.ribbit;
 
+import com.squareup.picasso.Picasso;
+
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,14 +20,12 @@ public class ViewImageActivity extends Activity {
 		
 		//Get uri from the inbox fragment intent
 		Uri imageUri = getIntent().getData();
+		
+		//Need to load the image direct from remote Parse server. Using a Picasso library to load images from Parse
+		Picasso.with(this).load(imageUri.toString()).into(imageView);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.view_image, menu);
-		return true;
-	}
+	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -33,9 +33,7 @@ public class ViewImageActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 }
