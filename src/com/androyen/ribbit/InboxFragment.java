@@ -1,5 +1,6 @@
 package com.androyen.ribbit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
@@ -111,6 +112,28 @@ public class InboxFragment extends ListFragment {
 	 			intent.setDataAndType(fileUri, "video/*");
 	 			startActivity(intent);
 	 		}
+	 		
+	 		//Delete the message Remove the recipient
+	 		//Get list of recipients
+	 		List<String> ids = message.getList(ParseConstants.KEY_RECIPIENT_IDS);
+	 		
+	 		if (ids.size() == 1) {
+	 			//Last recipient   Delete the whole thing
+	 			message.deleteInBackground();
+	 		}
+	 		else {
+	 			//remove the recipient and save
+	 			//Remove the current user ID locally in app
+	 			ids.remove(ParseUser.getCurrentUser().getCurrentUser());
+	 			
+	 			//Create array to remove and then save the collection back to Parse
+	 			ArrayList<String>idsToRemove = new ArrayList<String>();
+	 			idsToRemove.add(ParseUser.getCurrentUser().getObjectId());
+	 			
+	 			message.removeAll(ParseConstants.KEY_RECIPIENT_IDS, idsToRemove);
+	 			message.saveInBackground();
+	 		}
+	 		
 	 	}
 	 }
 	
