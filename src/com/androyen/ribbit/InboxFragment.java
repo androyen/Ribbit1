@@ -96,6 +96,11 @@ public class InboxFragment extends ListFragment {
 	 		}
 	 		else {
 	 			//View video
+	 			
+	 			//Implicit intent to allow user to choose app to view video
+	 			Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
+	 			intent.setDataAndType(fileUri, "video/*");
+	 			startActivity(intent);
 	 		}
 	 	}
 	 }
