@@ -61,7 +61,7 @@ public class InboxFragment extends ListFragment {
 					}
 					
 					//Get Context
-					ArrayAdapter<String> adapter = new ArrayAdapter<String>(getListView().getContext(), android.R.layout.simple_list_item_1, usernames);
+					MessageAdapter adapter = new MessageAdapter(getListView().getContext(), mMessages);
 					setListAdapter(adapter);
 					
 					}
